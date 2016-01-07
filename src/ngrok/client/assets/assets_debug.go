@@ -44,7 +44,7 @@ type asset struct {
 
 // assetsClientPageHtml reads file data from disk. It returns an error on failure.
 func assetsClientPageHtml() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/page.html"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/page.html"
 	name := "assets/client/page.html"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -62,7 +62,7 @@ func assetsClientPageHtml() (*asset, error) {
 
 // assetsClientStaticCssBootstrapMinCss reads file data from disk. It returns an error on failure.
 func assetsClientStaticCssBootstrapMinCss() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/css/bootstrap.min.css"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/css/bootstrap.min.css"
 	name := "assets/client/static/css/bootstrap.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -80,7 +80,7 @@ func assetsClientStaticCssBootstrapMinCss() (*asset, error) {
 
 // assetsClientStaticCssHighlightMinCss reads file data from disk. It returns an error on failure.
 func assetsClientStaticCssHighlightMinCss() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/css/highlight.min.css"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/css/highlight.min.css"
 	name := "assets/client/static/css/highlight.min.css"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -98,7 +98,7 @@ func assetsClientStaticCssHighlightMinCss() (*asset, error) {
 
 // assetsClientStaticImgGlyphiconsHalflingsPng reads file data from disk. It returns an error on failure.
 func assetsClientStaticImgGlyphiconsHalflingsPng() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/img/glyphicons-halflings.png"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/img/glyphicons-halflings.png"
 	name := "assets/client/static/img/glyphicons-halflings.png"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -116,7 +116,7 @@ func assetsClientStaticImgGlyphiconsHalflingsPng() (*asset, error) {
 
 // assetsClientStaticJsAngularSanitizeMinJs reads file data from disk. It returns an error on failure.
 func assetsClientStaticJsAngularSanitizeMinJs() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/js/angular-sanitize.min.js"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/js/angular-sanitize.min.js"
 	name := "assets/client/static/js/angular-sanitize.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -134,7 +134,7 @@ func assetsClientStaticJsAngularSanitizeMinJs() (*asset, error) {
 
 // assetsClientStaticJsAngularJs reads file data from disk. It returns an error on failure.
 func assetsClientStaticJsAngularJs() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/js/angular.js"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/js/angular.js"
 	name := "assets/client/static/js/angular.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -152,7 +152,7 @@ func assetsClientStaticJsAngularJs() (*asset, error) {
 
 // assetsClientStaticJsBase64Js reads file data from disk. It returns an error on failure.
 func assetsClientStaticJsBase64Js() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/js/base64.js"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/js/base64.js"
 	name := "assets/client/static/js/base64.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -170,7 +170,7 @@ func assetsClientStaticJsBase64Js() (*asset, error) {
 
 // assetsClientStaticJsHighlightMinJs reads file data from disk. It returns an error on failure.
 func assetsClientStaticJsHighlightMinJs() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/js/highlight.min.js"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/js/highlight.min.js"
 	name := "assets/client/static/js/highlight.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -188,7 +188,7 @@ func assetsClientStaticJsHighlightMinJs() (*asset, error) {
 
 // assetsClientStaticJsJquery191MinJs reads file data from disk. It returns an error on failure.
 func assetsClientStaticJsJquery191MinJs() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/js/jquery-1.9.1.min.js"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/js/jquery-1.9.1.min.js"
 	name := "assets/client/static/js/jquery-1.9.1.min.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -206,7 +206,7 @@ func assetsClientStaticJsJquery191MinJs() (*asset, error) {
 
 // assetsClientStaticJsJqueryTimeagoJs reads file data from disk. It returns an error on failure.
 func assetsClientStaticJsJqueryTimeagoJs() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/js/jquery.timeago.js"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/js/jquery.timeago.js"
 	name := "assets/client/static/js/jquery.timeago.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -224,7 +224,7 @@ func assetsClientStaticJsJqueryTimeagoJs() (*asset, error) {
 
 // assetsClientStaticJsNgrokJs reads file data from disk. It returns an error on failure.
 func assetsClientStaticJsNgrokJs() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/js/ngrok.js"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/js/ngrok.js"
 	name := "assets/client/static/js/ngrok.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -242,7 +242,7 @@ func assetsClientStaticJsNgrokJs() (*asset, error) {
 
 // assetsClientStaticJsVkbeautifyJs reads file data from disk. It returns an error on failure.
 func assetsClientStaticJsVkbeautifyJs() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/static/js/vkbeautify.js"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/static/js/vkbeautify.js"
 	name := "assets/client/static/js/vkbeautify.js"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -260,7 +260,7 @@ func assetsClientStaticJsVkbeautifyJs() (*asset, error) {
 
 // assetsClientTlsNgrokrootCrt reads file data from disk. It returns an error on failure.
 func assetsClientTlsNgrokrootCrt() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/tls/ngrokroot.crt"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/tls/ngrokroot.crt"
 	name := "assets/client/tls/ngrokroot.crt"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -278,7 +278,7 @@ func assetsClientTlsNgrokrootCrt() (*asset, error) {
 
 // assetsClientTlsSnakeoilcaCrt reads file data from disk. It returns an error on failure.
 func assetsClientTlsSnakeoilcaCrt() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/client/tls/snakeoilca.crt"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/client/tls/snakeoilca.crt"
 	name := "assets/client/tls/snakeoilca.crt"
 	bytes, err := bindataRead(path, name)
 	if err != nil {

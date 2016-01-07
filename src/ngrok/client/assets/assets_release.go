@@ -98,7 +98,7 @@ func assetsClientPageHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/page.html", size: 7256, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/page.html", size: 7256, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -118,7 +118,7 @@ func assetsClientStaticCssBootstrapMinCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/css/bootstrap.min.css", size: 126456, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/css/bootstrap.min.css", size: 126456, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -138,7 +138,7 @@ func assetsClientStaticCssHighlightMinCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/css/highlight.min.css", size: 1860, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/css/highlight.min.css", size: 1860, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -158,7 +158,7 @@ func assetsClientStaticImgGlyphiconsHalflingsPng() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/img/glyphicons-halflings.png", size: 12799, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/img/glyphicons-halflings.png", size: 12799, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -178,7 +178,7 @@ func assetsClientStaticJsAngularSanitizeMinJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/js/angular-sanitize.min.js", size: 3929, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/js/angular-sanitize.min.js", size: 3929, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -198,7 +198,7 @@ func assetsClientStaticJsAngularJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/js/angular.js", size: 88802, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/js/angular.js", size: 88802, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -218,7 +218,7 @@ func assetsClientStaticJsBase64Js() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/js/base64.js", size: 6206, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/js/base64.js", size: 6206, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -238,7 +238,7 @@ func assetsClientStaticJsHighlightMinJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/js/highlight.min.js", size: 22562, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/js/highlight.min.js", size: 22562, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -258,7 +258,7 @@ func assetsClientStaticJsJquery191MinJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/js/jquery-1.9.1.min.js", size: 92629, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/js/jquery-1.9.1.min.js", size: 92629, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -278,7 +278,7 @@ func assetsClientStaticJsJqueryTimeagoJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/js/jquery.timeago.js", size: 6111, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/js/jquery.timeago.js", size: 6111, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -298,7 +298,7 @@ func assetsClientStaticJsNgrokJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/js/ngrok.js", size: 11600, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/js/ngrok.js", size: 11600, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -318,7 +318,7 @@ func assetsClientStaticJsVkbeautifyJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/static/js/vkbeautify.js", size: 10469, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/static/js/vkbeautify.js", size: 10469, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -338,7 +338,7 @@ func assetsClientTlsNgrokrootCrt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/tls/ngrokroot.crt", size: 1107, mode: os.FileMode(436), modTime: time.Unix(1444379970, 0)}
+	info := bindataFileInfo{name: "assets/client/tls/ngrokroot.crt", size: 1107, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
@@ -358,7 +358,7 @@ func assetsClientTlsSnakeoilcaCrt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/client/tls/snakeoilca.crt", size: 1822, mode: os.FileMode(436), modTime: time.Unix(1402010457, 0)}
+	info := bindataFileInfo{name: "assets/client/tls/snakeoilca.crt", size: 1822, mode: os.FileMode(436), modTime: time.Unix(1452132613, 0)}
 	a := &asset{bytes: bytes, info:  info}
 	return a, nil
 }
