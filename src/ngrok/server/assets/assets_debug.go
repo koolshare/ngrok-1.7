@@ -32,7 +32,7 @@ type asset struct {
 
 // assetsServerTlsSnakeoilCrt reads file data from disk. It returns an error on failure.
 func assetsServerTlsSnakeoilCrt() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/server/tls/snakeoil.crt"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/server/tls/snakeoil.crt"
 	name := "assets/server/tls/snakeoil.crt"
 	bytes, err := bindataRead(path, name)
 	if err != nil {
@@ -50,7 +50,7 @@ func assetsServerTlsSnakeoilCrt() (*asset, error) {
 
 // assetsServerTlsSnakeoilKey reads file data from disk. It returns an error on failure.
 func assetsServerTlsSnakeoilKey() (*asset, error) {
-	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7/assets/server/tls/snakeoil.key"
+	path := "/home/janson/workspace-go/src/github.com/inconshreveable/ngrok-1.7-ks/assets/server/tls/snakeoil.key"
 	name := "assets/server/tls/snakeoil.key"
 	bytes, err := bindataRead(path, name)
 	if err != nil {

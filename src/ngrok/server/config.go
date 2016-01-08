@@ -13,6 +13,11 @@ import (
 	"github.com/peterbourgon/diskv"
 )
 
+const (
+	DbPrefix = "ngrok"
+	DbPass   = "koolshare-com"
+)
+
 type UserConfig struct {
 	UserId string   `json:"userId"`
 	AuthId string   `json:"authId"`
@@ -26,26 +31,25 @@ type UserInfo struct {
 	TransAll    uint64
 }
 
-type DdProvider interface {
+type DbProvider interface {
 	Save(mgr *ConfigMgr, config *UserConfig) error
 	LoadAll(mgr *ConfigMgr) error
 }
 
 type Db struct {
-	diskv  *diskv.Diskv
-	prefix string
+	diskv *diskv.Diskv
 }
 
 type ConfigMgr struct {
 	mu    sync.RWMutex
-	db    *DbProvider
+	db    DbProvider
 	users map[string]*UserInfo
 	dns   map[string]*UserInfo
 }
 
 type appHandler struct {
 	*ConfigMgr
-	h func(*ServerHttpd, http.ResponseWriter, *http.Request) (int, error)
+	h func(*ConfigMgr, http.ResponseWriter, *http.Request) (int, error)
 }
 
 func (ah appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -84,11 +88,13 @@ func blockTransform(s string) []string {
 }
 
 func (db *Db) Save(mgr *ConfigMgr, uc *UserConfig) error {
-	db.diskv.Write(db.prefix+":"+uc.AuthId, json.Marshal(uc))
+	b, _ := json.Marshal(uc)
+	db.diskv.Write(DbPrefix+":"+uc.AuthId, b)
+	return nil
 }
 
 func (db *Db) LoadAll(mgr *ConfigMgr) error {
-	keys := db.diskv.KeysPrefix(db.prefix)
+	keys := db.diskv.KeysPrefix(DbPrefix)
 	for _, k := range keys {
 		if uc, err := db.loadFrom(k); err == nil {
 			mgr.AddUserConfig(uc)
@@ -96,6 +102,8 @@ func (db *Db) LoadAll(mgr *ConfigMgr) error {
 			log.Println("loadFrom db error", err)
 		}
 	}
+
+	return nil
 }
 
 func (db *Db) loadFrom(key string) (*UserConfig, error) {
@@ -135,6 +143,7 @@ func (mgr *ConfigMgr) bindUserInner(uc *UserConfig) error {
 	mgr.mu.Lock()
 	defer mgr.mu.Unlock()
 
+	var ui *UserInfo
 	if ui, exists := mgr.users[uc.AuthId]; !exists {
 		return errors.New("not exists")
 	} else {
@@ -149,8 +158,7 @@ func (mgr *ConfigMgr) bindUserInner(uc *UserConfig) error {
 		}
 	}
 
-	ui := &UserInfo{uc: uc}
-	mgr.users[uc.AuthId] = ui
+	ui.uc = uc
 	for _, dns := range uc.Dns {
 		mgr.dns[dns] = ui
 	}
@@ -173,13 +181,18 @@ func (mgr *ConfigMgr) ListAll() []string {
 
 	s := make([]string, 0, 256)
 	for _, v := range mgr.users {
-		s = append(s, json.Marshal(v))
+		b, _ := json.Marshal(v)
+		s = append(s, string(b))
 	}
 
 	return s
 }
 
 func addUser(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error) {
+	if DbPass != r.Header.Get("Auth") {
+		return 400, errors.New("not allow")
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return 400, err
@@ -190,11 +203,11 @@ func addUser(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error
 		return 400, err
 	}
 
-	if err := mgr.AddUserConfig(uc); err != nil {
+	if err := mgr.AddUserConfig(&uc); err != nil {
 		return 400, err
 	}
 
-	mgr.db.Save(mgr, uc)
+	mgr.db.Save(mgr, &uc)
 
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprint(w, "{'code': 'ok'}")
@@ -202,14 +215,23 @@ func addUser(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error
 }
 
 func showInfo(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error) {
+	if "koolshare-com" != r.Header.Get("Auth") {
+		return 400, errors.New("not allow")
+	}
+
 	s := mgr.ListAll()
 	for _, ss := range s {
 		fmt.Fprint(w, ss+"<br/>")
 	}
 }
 
-func ConfigMain() {
-	addr := ":4446"
+var cMgr *ConfigMgr
+
+func GetMgr() *ConfigMgr {
+	return cMgr
+}
+
+func NewConfigMgr() *ConfigMgr {
 	path := "/tmp/db-diskv"
 
 	diskv := diskv.New(diskv.Options{
@@ -218,11 +240,16 @@ func ConfigMain() {
 		CacheSizeMax: 1024 * 1024, // 1MB
 	})
 	db := &Db{diskv: diskv}
-	mgr := &ConfigMgr{db: db, users: make(map[string]*UserInfo), dns: make(map[string]*UserInfo)}
+	return &ConfigMgr{db: db, users: make(map[string]*UserInfo), dns: make(map[string]*UserInfo)}
+}
+
+func ConfigMain() {
+	addr := ":4446"
+	cMgr = NewConfigMgr()
 
 	router := mux.NewRouter()
-	router.Handle("/adduser", appHandler{mgr, addUser})
-	router.Handle("/info", appHandler{mgr, showInfo})
+	router.Handle("/adduser", appHandler{cMgr, addUser})
+	router.Handle("/info", appHandler{cMgr, showInfo})
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./statics/"))))
 	http.ListenAndServe(addr, router)
 }
