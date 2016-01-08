@@ -301,6 +301,12 @@ func CheckForLogin(authMsg *msg.Auth) *UserInfo {
 	if usr.Uc.UserId == "" {
 		//bind
 		cMgr.BindUser(authMsg.ClientId, authMsg.Password)
+	} else {
+		day := atomic.LoadInt64(&usr.TransPerDay)
+		//bigger than 1G is not allow
+		if day > 1024*1024*1024 {
+			return nil
+		}
 	}
 
 	return usr
