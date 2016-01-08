@@ -8,6 +8,10 @@ import (
 	"log"
 	"net/http"
 	"sync"
+	"sync/atomic"
+	"time"
+
+	msg "ngrok/msg"
 
 	"github.com/gorilla/mux"
 	"github.com/peterbourgon/diskv"
@@ -25,10 +29,10 @@ type UserConfig struct {
 }
 
 type UserInfo struct {
-	uc *UserConfig
+	Uc *UserConfig
 
-	TransPerDay uint64
-	TransAll    uint64
+	TransPerDay int64
+	TransAll    int64
 }
 
 type DbProvider interface {
@@ -55,7 +59,7 @@ type appHandler struct {
 func (ah appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	status, err := ah.h(ah.ConfigMgr, w, r)
 	if err != nil {
-		log.Println("HTTP %d: %q\n", status, err)
+		log.Println("HTTP ", status, " : ", err)
 		switch status {
 		case http.StatusNotFound:
 			http.NotFound(w, r)
@@ -94,8 +98,8 @@ func (db *Db) Save(mgr *ConfigMgr, uc *UserConfig) error {
 }
 
 func (db *Db) LoadAll(mgr *ConfigMgr) error {
-	keys := db.diskv.KeysPrefix(DbPrefix)
-	for _, k := range keys {
+	keys := db.diskv.KeysPrefix(DbPrefix, nil)
+	for k := range keys {
 		if uc, err := db.loadFrom(k); err == nil {
 			mgr.AddUserConfig(uc)
 		} else {
@@ -110,12 +114,16 @@ func (db *Db) loadFrom(key string) (*UserConfig, error) {
 	var uc UserConfig
 	if b, err := db.diskv.Read(key); err == nil {
 		if err2 := json.Unmarshal(b, &uc); err2 == nil {
-			return &uc
+			return &uc, nil
+		} else {
+			return nil, err
 		}
+	} else {
+		return nil, err
 	}
 }
 
-//Add new config
+//Add new config, but not save to db
 func (mgr *ConfigMgr) AddUserConfig(uc *UserConfig) error {
 	mgr.mu.Lock()
 	defer mgr.mu.Unlock()
@@ -130,7 +138,7 @@ func (mgr *ConfigMgr) AddUserConfig(uc *UserConfig) error {
 		}
 	}
 
-	ui := &UserInfo{uc: uc}
+	ui := &UserInfo{Uc: uc}
 	mgr.users[uc.AuthId] = ui
 	for _, dns := range uc.Dns {
 		mgr.dns[dns] = ui
@@ -139,35 +147,32 @@ func (mgr *ConfigMgr) AddUserConfig(uc *UserConfig) error {
 	return nil
 }
 
-func (mgr *ConfigMgr) bindUserInner(uc *UserConfig) error {
+func (mgr *ConfigMgr) bindUserInner(id string, user string) (*UserConfig, error) {
 	mgr.mu.Lock()
 	defer mgr.mu.Unlock()
 
 	var ui *UserInfo
-	if ui, exists := mgr.users[uc.AuthId]; !exists {
-		return errors.New("not exists")
+	var exists bool
+	if ui, exists = mgr.users[id]; !exists {
+		return nil, errors.New("not exists")
 	} else {
-		if ui.uc.UserId != "" {
-			return errors.New("already bind")
+		if ui.Uc.UserId != "" {
+			return nil, errors.New("already bind")
 		}
 	}
 
-	for _, dns := range uc.Dns {
-		if _, exists := mgr.dns[dns]; exists {
-			return errors.New("dns exists")
-		}
+	if nil == ui.Uc {
+		return nil, errors.New("UserConfig not configurate")
 	}
 
-	ui.uc = uc
-	for _, dns := range uc.Dns {
-		mgr.dns[dns] = ui
-	}
+	//Set it
+	ui.Uc.UserId = user
 
-	return nil
+	return ui.Uc, nil
 }
 
-func (mgr *ConfigMgr) BindUser(uc *UserConfig) error {
-	if err := mgr.bindUserInner(uc); err == nil {
+func (mgr *ConfigMgr) BindUser(id string, user string) error {
+	if uc, err := mgr.bindUserInner(id, user); err == nil {
 		mgr.db.Save(mgr, uc)
 		return nil
 	} else {
@@ -188,6 +193,37 @@ func (mgr *ConfigMgr) ListAll() []string {
 	return s
 }
 
+func (mgr *ConfigMgr) GetUserInfo(id string) *UserInfo {
+	mgr.mu.RLock()
+	defer mgr.mu.RUnlock()
+
+	if ui, ok := mgr.users[id]; ok {
+		return ui
+	}
+
+	return nil
+}
+
+func (mgr *ConfigMgr) GetByDns(dns string) *UserInfo {
+	mgr.mu.RLock()
+	defer mgr.mu.RUnlock()
+
+	if ui, ok := mgr.dns[dns]; ok {
+		return ui
+	}
+
+	return nil
+}
+
+func (mgr *ConfigMgr) TimeoutAllDays() {
+	mgr.mu.RLock()
+	defer mgr.mu.RUnlock()
+
+	for _, v := range mgr.users {
+		atomic.StoreInt64(&v.TransPerDay, 0)
+	}
+}
+
 func addUser(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error) {
 	if DbPass != r.Header.Get("Auth") {
 		return 400, errors.New("not allow")
@@ -197,6 +233,7 @@ func addUser(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error
 	if err != nil {
 		return 400, err
 	}
+	log.Println("body:", string(body))
 
 	var uc UserConfig
 	if err := json.Unmarshal(body, &uc); err != nil {
@@ -215,20 +252,58 @@ func addUser(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error
 }
 
 func showInfo(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error) {
-	if "koolshare-com" != r.Header.Get("Auth") {
+	if DbPass != r.Header.Get("Auth") {
 		return 400, errors.New("not allow")
 	}
 
 	s := mgr.ListAll()
 	for _, ss := range s {
-		fmt.Fprint(w, ss+"<br/>")
+		fmt.Fprint(w, ss+"\n")
 	}
+
+	return 200, nil
 }
 
 var cMgr *ConfigMgr
 
 func GetMgr() *ConfigMgr {
 	return cMgr
+}
+
+func GetUserInfo(id string) *UserInfo {
+	return cMgr.GetUserInfo(id)
+}
+
+func GetByDns(dns string) *UserInfo {
+	return cMgr.GetByDns(dns)
+}
+
+func (ui *UserInfo) CheckDns(dns string) bool {
+	for _, s := range ui.Uc.Dns {
+		if s == dns {
+			return true
+		}
+	}
+
+	return false
+}
+
+func CheckForLogin(authMsg *msg.Auth) *UserInfo {
+	usr := cMgr.GetUserInfo(authMsg.ClientId)
+	if usr == nil {
+		return nil
+	}
+
+	if usr.Uc.UserId != "" && usr.Uc.UserId != authMsg.Password {
+		return nil
+	}
+
+	if usr.Uc.UserId == "" {
+		//bind
+		cMgr.BindUser(authMsg.ClientId, authMsg.Password)
+	}
+
+	return usr
 }
 
 func NewConfigMgr() *ConfigMgr {
@@ -246,6 +321,17 @@ func NewConfigMgr() *ConfigMgr {
 func ConfigMain() {
 	addr := ":4446"
 	cMgr = NewConfigMgr()
+	cMgr.db.LoadAll(cMgr)
+
+	go func() {
+		tick := time.NewTicker(time.Hour * 24)
+		for {
+			select {
+			case <-tick.C:
+				cMgr.TimeoutAllDays()
+			}
+		}
+	}()
 
 	router := mux.NewRouter()
 	router.Handle("/adduser", appHandler{cMgr, addUser})

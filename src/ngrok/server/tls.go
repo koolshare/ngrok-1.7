@@ -35,7 +35,10 @@ func LoadTLSConfig(crtPath string, keyPath string) (tlsConfig *tls.Config, err e
 		return
 	}
 
+	//https://github.com/golang/go/issues/9364
+	//log.Info("MinVersion:", tls.VersionSSL30)
 	tlsConfig = &tls.Config{
+		MinVersion:   tls.VersionSSL30,
 		Certificates: []tls.Certificate{cert},
 	}
 

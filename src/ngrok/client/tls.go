@@ -6,6 +6,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"ngrok/client/assets"
+	log "ngrok/log"
 )
 
 func LoadTLSConfig(rootCertPaths []string) (*tls.Config, error) {
@@ -30,5 +31,7 @@ func LoadTLSConfig(rootCertPaths []string) (*tls.Config, error) {
 		pool.AddCert(certs[0])
 	}
 
-	return &tls.Config{RootCAs: pool}, nil
+	//https://github.com/golang/go/issues/9364
+	log.Info("MinVersion:", tls.VersionSSL30)
+	return &tls.Config{RootCAs: pool, MinVersion: tls.VersionSSL30, InsecureSkipVerify: true}, nil
 }

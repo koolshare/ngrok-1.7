@@ -1,8 +1,9 @@
 package log
 
 import (
-	log "code.google.com/p/log4go"
 	"fmt"
+
+	log "code.google.com/p/log4go"
 )
 
 var root log.Logger = make(log.Logger)
@@ -20,7 +21,7 @@ func LogTo(target string) {
 	}
 
 	if writer != nil {
-		root.AddFilter("log", log.DEBUG, writer)
+		root.AddFilter("log", log.INFO, writer)
 	}
 }
 

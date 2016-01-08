@@ -296,4 +296,8 @@ func (t *Tunnel) HandlePublicConnection(publicConn conn.Conn) {
 	// join the public and proxy connections
 	bytesIn, bytesOut := conn.Join(publicConn, proxyConn)
 	metrics.CloseConnection(t, publicConn, startTime, bytesIn, bytesOut)
+
+	//log.Info("Proxy authId=%s bytesIn=%d, bytesOut=%d\n", t.ctl.userInfo.Uc.UserId, bytesIn, bytesOut)
+	atomic.AddInt64(&t.ctl.userInfo.TransPerDay, bytesIn+bytesOut)
+	atomic.AddInt64(&t.ctl.userInfo.TransAll, bytesIn+bytesOut)
 }

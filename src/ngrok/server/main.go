@@ -126,6 +126,10 @@ func Main() {
 		panic(err)
 	}
 
+	//log.Info("start config main")
+	//Add by jannson, start config http server
+	go ConfigMain()
+
 	// listen for http
 	if opts.httpAddr != "" {
 		listeners["http"] = startHttpListener(opts.httpAddr, nil)
