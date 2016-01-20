@@ -22,6 +22,7 @@ Examples:
 Advanced usage: ngrok [OPTIONS] <command> [command args] [...]
 Commands:
 	ngrok start [tunnel] [...]    Start tunnels by name from config file
+	ngrok list                    List tunnel names from config file
 	ngrok help                    Print help
 	ngrok version                 Print ngrok version
 
@@ -35,6 +36,7 @@ Examples:
 type Options struct {
 	config    string
 	logto     string
+	loglevel  string
 	authtoken string
 	httpauth  string
 	hostname  string
@@ -60,6 +62,11 @@ func ParseArgs() (opts *Options, err error) {
 		"log",
 		"none",
 		"Write log messages to this file. 'stdout' and 'none' have special meanings")
+
+	loglevel := flag.String(
+		"log-level",
+		"DEBUG",
+		"The level of messages to log. One of: DEBUG, INFO, WARNING, ERROR")
 
 	authtoken := flag.String(
 		"authtoken",
@@ -91,6 +98,7 @@ func ParseArgs() (opts *Options, err error) {
 	opts = &Options{
 		config:    *config,
 		logto:     *logto,
+		loglevel:  *loglevel,
 		httpauth:  *httpauth,
 		subdomain: *subdomain,
 		protocol:  *protocol,
@@ -100,6 +108,8 @@ func ParseArgs() (opts *Options, err error) {
 	}
 
 	switch opts.command {
+	case "list":
+		opts.args = flag.Args()[1:]
 	case "start":
 		opts.args = flag.Args()[1:]
 	case "version":

@@ -8,7 +8,7 @@ import (
 
 var root log.Logger = make(log.Logger)
 
-func LogTo(target string) {
+func LogTo(target string, level_name string) {
 	var writer log.LogWriter = nil
 
 	switch target {
@@ -21,7 +21,30 @@ func LogTo(target string) {
 	}
 
 	if writer != nil {
-		root.AddFilter("log", log.INFO, writer)
+		var level = log.DEBUG
+
+		switch level_name {
+		case "FINEST":
+			level = log.FINEST
+		case "FINE":
+			level = log.FINE
+		case "DEBUG":
+			level = log.DEBUG
+		case "TRACE":
+			level = log.TRACE
+		case "INFO":
+			level = log.INFO
+		case "WARNING":
+			level = log.WARNING
+		case "ERROR":
+			level = log.ERROR
+		case "CRITICAL":
+			level = log.CRITICAL
+		default:
+			level = log.INFO
+		}
+
+		root.AddFilter("log", level, writer)
 	}
 }
 

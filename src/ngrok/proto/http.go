@@ -93,7 +93,12 @@ func (h *Http) readRequests(tee *conn.Tee, lastTxn chan *HttpTxn, connCtx interf
 
 		txn := &HttpTxn{Start: time.Now(), ConnUserCtx: connCtx}
 		txn.Req = &HttpRequest{Request: req}
-		txn.Req.BodyBytes, txn.Req.Body, err = extractBody(req.Body)
+		if req.Body != nil {
+			txn.Req.BodyBytes, txn.Req.Body, err = extractBody(req.Body)
+			if err != nil {
+				tee.Warn("Failed to extract request body: %v", err)
+			}
+		}
 
 		lastTxn <- txn
 		h.Txns.In() <- txn
