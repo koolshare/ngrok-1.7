@@ -19,7 +19,6 @@ import (
 
 const (
 	DbPrefix = "ngrok"
-	DbPass   = "koolshare-com"
 )
 
 type UserConfig struct {
@@ -225,7 +224,7 @@ func (mgr *ConfigMgr) TimeoutAllDays() {
 }
 
 func addUser(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error) {
-	if DbPass != r.Header.Get("Auth") {
+	if opts.pass != r.Header.Get("Auth") {
 		return 400, errors.New("not allow")
 	}
 
@@ -252,7 +251,7 @@ func addUser(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error
 }
 
 func showInfo(mgr *ConfigMgr, w http.ResponseWriter, r *http.Request) (int, error) {
-	if DbPass != r.Header.Get("Auth") {
+	if opts.pass != r.Header.Get("Auth") {
 		return 400, errors.New("not allow")
 	}
 
