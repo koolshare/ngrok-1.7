@@ -20,7 +20,7 @@ https://子域名.etunnel.net
 '''
 
 #s2 = ['"' + s4 + '"' for s4 in 'web api jsr jsn jsv'.split()]
-s2 = "a b c d e".split()
+s2 = "route pi nas iio zeus".split()
 rlt = str(s2).replace("'", '"')
 print '{"userId":"%s","authId":"%s","dns":%s}' % (s2[0], s, rlt)
 print txt % (s, s2[0], rlt, s2[1])
