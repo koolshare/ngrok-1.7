@@ -30,8 +30,8 @@ type UserConfig struct {
 type UserInfo struct {
 	Uc *UserConfig
 
-	TransPerDay int64
-	TransAll    int64
+	TransPerDay int32
+	TransAll    int32
 }
 
 type DbProvider interface {
@@ -219,7 +219,7 @@ func (mgr *ConfigMgr) TimeoutAllDays() {
 	defer mgr.mu.RUnlock()
 
 	for _, v := range mgr.users {
-		atomic.StoreInt64(&v.TransPerDay, 0)
+		atomic.StoreInt32(&v.TransPerDay, 0)
 	}
 }
 
@@ -301,7 +301,7 @@ func CheckForLogin(authMsg *msg.Auth) *UserInfo {
 		//bind
 		cMgr.BindUser(authMsg.ClientId, authMsg.Password)
 	} else {
-		day := atomic.LoadInt64(&usr.TransPerDay)
+		day := atomic.LoadInt32(&usr.TransPerDay)
 		//bigger than 1G is not allow
 		if day > 1024*1024*1024 {
 			return nil
