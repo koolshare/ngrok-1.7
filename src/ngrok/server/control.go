@@ -60,6 +60,7 @@ type Control struct {
 	// synchronizer for controller shutdown of entire Control
 	shutdown *util.Shutdown
 
+	isAdmin  bool
 	userInfo *UserInfo
 }
 
@@ -85,10 +86,10 @@ func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
 		ctlConn.Close()
 	}
 
-	/* if opts.pass != authMsg.Password {
-		failAuth(errors.New("Auth failed"))
-		return
-	} */
+	if opts.pass == authMsg.Password {
+		c.isAdmin = true
+	}
+
 	if authMsg.ClientId == "" {
 		authMsg.ClientId = authMsg.User
 	}
@@ -105,7 +106,7 @@ func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
 
 	//log.Info("clientId: %s", c.id)
 	ui := CheckForLogin(authMsg)
-	if ui == nil {
+	if ui == nil && !c.isAdmin {
 		failAuth(errors.New("Auth failed"))
 		return
 	}
@@ -146,7 +147,7 @@ func NewControl(ctlConn conn.Conn, authMsg *msg.Auth) {
 
 // Register a new tunnel on this control connection
 func (c *Control) registerTunnel(rawTunnelReq *msg.ReqTunnel) {
-	if rawTunnelReq.Subdomain != "" && !c.userInfo.CheckDns(rawTunnelReq.Subdomain) {
+	if !c.isAdmin && rawTunnelReq.Subdomain != "" && !c.userInfo.CheckDns(rawTunnelReq.Subdomain) {
 		c.conn.Warn("Dns not ok %s, ignore", rawTunnelReq.Subdomain)
 		return
 	}
